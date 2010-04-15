@@ -1,0 +1,23 @@
+<%= button_link_to t("new_campaign"), new_object_url, :icon => 'add' %>
+
+<h1><%= t("ext_listing_campaigns") %></h1>
+<table class="index">
+  <thead>
+    <th><%= t("ext_campaign_manager_title") %></th>
+    <th><%= t("ext_campaign_manager_start_date") %></th>
+    <th><%= t("ext_campaign_manager_end_date") %></th>
+    <th><%= t("ext_campaign_manager_taxonomy_root") %></th>
+    <th><%= t("ext_campaign_manager_image_thumbnail") %></th>
+    <th><%= t("actions") %></th>
+  </thead>
+  <% @campaigns.each do |campaign| -%>
+  <tr id="<%= dom_id campaign %>">
+    <td><%= h campaign.title %></td>
+    <td><%= h campaign.start_date %></td>
+    <td><%= h campaign.end_date %></td>
+    <td><%= h campaign.taxonomy_id.to_s %></td>
+    <td>TODO</td>
+    <td><%= link_to_edit campaign %> <%= link_to_delete campaign %></td>
+  </tr>
+  <% end -%>
+</table>

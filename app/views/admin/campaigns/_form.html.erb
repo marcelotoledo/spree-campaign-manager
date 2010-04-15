@@ -1,0 +1,18 @@
+<table>
+  <tr>
+    <td><%= t("ext_campaign_manager_title") %>:</td>
+    <td><%= f.text_field :title %></td>
+  </tr>
+  <tr>
+    <td><%= t("ext_campaign_manager_start_date") %>:</td>
+    <td><%= f.unobtrusive_date_text_picker :start_date %></td>
+  </tr>
+  <tr>
+    <td><%= t("ext_campaign_manager_end_date") %>:</td>
+    <td><%= f.unobtrusive_date_text_picker :end_date %></td>
+  </tr>
+  <tr>
+    <td><%= t("ext_campaign_manager_taxonomy_root") %>:</td>
+    <td><%= f.text_field :taxonomy_id %></td>
+  </tr>
+</table>
