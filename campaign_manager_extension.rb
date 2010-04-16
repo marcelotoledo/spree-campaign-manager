@@ -13,10 +13,6 @@ class CampaignManagerExtension < Spree::Extension
   # end
   
   def activate
-
-    # make your helper avaliable in all views
-    # Spree::BaseController.class_eval do
-    #   helper YourHelper
-    # end
+    TaxonsHelper.send(:include, Spree::CampaignManager::TaxonsHelper)
   end
 end

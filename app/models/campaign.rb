@@ -6,4 +6,12 @@ class Campaign < ActiveRecord::Base
     :default_style => :large,
     :url => "/assets/campaigns/:id/:style/:basename.:extension",
     :path => ":rails_root/public/assets/campaigns/:id/:style/:basename.:extension"
+
+  def expired?
+    self.end_date < Date.today
+  end
+
+  def in_the_future?
+    self.start_date > Date.today
+  end
 end

@@ -1,0 +1,20 @@
+<table cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td valign="top" width="20%">
+      <h2><%= link_to @campaign.taxonomy.root.name.singularize, "/campaigns/#{@campaign.id}" %></h2>
+      <ul>
+        <% @campaign.taxonomy.root.children.each do |taxon| %>
+        <li>&nbsp;&nbsp;&nbsp;<%= link_to taxon.name, campaign_seo_url(@campaign, taxon) %></li>
+        <% end %>
+      </ul>
+      <h2>Active Campaigns</h2>
+      <% @campaigns.each do |campaign| -%>
+        <%= campaign.title %><br />
+      <% end -%>
+    </td>
+    <td valign="top" width="80%">
+      <%= special_breadcrumbs(@campaign, @taxon) %>
+      <%= render :partial => "shared/products", :locals => {:products => @products, :taxon => @taxon } %>
+    </td>
+  </tr>
+</table>
