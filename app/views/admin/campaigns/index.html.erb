@@ -8,16 +8,23 @@
     <th><%= t("ext_campaign_manager_end_date") %></th>
     <th><%= t("ext_campaign_manager_taxonomy_root") %></th>
     <th><%= t("ext_campaign_manager_image_thumbnail") %></th>
-    <th><%= t("actions") %></th>
+    <th></th>
   </thead>
   <% @campaigns.each do |campaign| -%>
   <tr id="<%= dom_id campaign %>">
     <td><%= h campaign.title %></td>
     <td><%= h campaign.start_date %></td>
     <td><%= h campaign.end_date %></td>
-    <td><%= h campaign.taxonomy_id.to_s %></td>
-    <td>TODO</td>
-    <td><%= link_to_edit campaign %> <%= link_to_delete campaign %></td>
+    <td><%= h campaign.taxonomy.name %></td>
+    <td>
+      <% if campaign.image.exists? -%>
+      <%= image_tag campaign.image.url(:thumb) %>
+      <% end -%>
+    </td>
+    <td class="taxonomy">
+      <%= link_to_edit campaign %>
+      <%= link_to_delete campaign %>
+    </td>
   </tr>
   <% end -%>
 </table>

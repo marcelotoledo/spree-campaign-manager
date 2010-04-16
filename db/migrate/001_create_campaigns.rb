@@ -5,7 +5,10 @@ class CreateCampaigns < ActiveRecord::Migration
       t.date :start_date  #additional restraints?
       t.date :end_date    #additional restraints?
       t.integer :taxonomy_id, :default => :nil
-      #add image link later
+
+      t.string :image_file_name
+      t.string :image_content_type
+      t.string :image_file_size
     end
   end
 
