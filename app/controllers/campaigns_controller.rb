@@ -17,12 +17,10 @@ class CampaignsController < Spree::BaseController
         @campaigns['active']['data'] << campaign
       end
     end
+    ['expired', 'future'].each { |type| @campaigns[type]['data'] = @campaigns[type]['data'].sort_by { |c| c.start_date }.reverse[0..9] }
   end
 
   def show
-    logger.warn "steph #{params.inspect}"
-    logger.warn "steph #{params[:id].first}"
-     
     @campaign = Campaign.find(params[:id].first)
     redirect_to root_url if @campaign.nil? || @campaign.in_the_future? || @campaign.expired?
 
@@ -31,5 +29,6 @@ class CampaignsController < Spree::BaseController
     p_length = params[:id].length
     @taxon = p_length == 1 ? @campaign.taxonomy.root : Taxon.find_by_permalink(params[:id].slice(1, p_length).join('/') + '/')
     retrieve_products
+    @paginated_products = @products
   end
 end

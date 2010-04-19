@@ -1,7 +1,8 @@
 <table cellpadding="0" cellspacing="0" width="100%">
   <tr>
     <td valign="top" width="20%">
-      <h2><%= link_to @campaign.taxonomy.root.name.singularize, "/campaigns/#{@campaign.id}" %></h2>
+
+      <h2><%= link_to @campaign.taxonomy.root.name.singularize, nested_campaign_taxons_path(@campaign.id) %></h2>
       <ul>
         <% @campaign.taxonomy.root.children.each do |taxon| %>
         <li>&nbsp;&nbsp;&nbsp;<%= link_to taxon.name, campaign_seo_url(@campaign, taxon) %></li>
@@ -14,7 +15,40 @@
     </td>
     <td valign="top" width="80%">
       <%= special_breadcrumbs(@campaign, @taxon) %>
-      <%= render :partial => "shared/products", :locals => {:products => @products, :taxon => @taxon } %>
+      <% if @products.empty? %>
+        <%= t(:no_products_found) %>
+      <% elsif params.key?(:keywords) %>
+        <h3><%= t(:search_results, :keywords => h(params[:keywords])) %></h3>
+      <% end %>
+ 
+      <% if @products.any? %>
+        <ul class="product-listing">
+        <% @products.each do |product| %>
+          <% if Spree::Config[:show_zero_stock_products] || product.has_stock? %>
+            <li id="product_<%= product.id %>">
+              <%= link_to small_image(product), product %>
+              <%= link_to product.name + "<span class='price selling'>#{product_price(product)}</span>", product, :class => 'info' %>
+            </li>
+          <% end %>
+        <% end %>
+        </ul>
+      <% end %>
+
+      <%= params.delete(:taxon); params.delete(:search) %>
+      <hr class="space" />
+      <% if @paginated_products.respond_to?(:total_pages) -%>
+        <% if params[:page].to_i != 1 %>
+          <%= link_to "First", nested_campaign_taxons_path(@campaign.id) %>
+        <% elsif @paginated_products.total_pages > 1 -%>
+          <span class="disabled">First</span>
+        <% end -%>
+        <%= will_paginate(@paginated_products, :previous_label => "#{t('previous')}", :next_label => "#{t('next')}", :container => false) %>
+        <% if @paginated_products.total_pages > 1 && params[:page].to_i != @paginated_products.total_pages %>
+          <%= link_to "Last", nested_campaign_taxons_path(@campaign.id, :page => @paginated_products.total_pages) %>
+        <% elsif @paginated_products.total_pages > 1 -%>
+          <span class="disabled">Last</span>
+        <% end -%>
+      <% end -%>
     </td>
   </tr>
 </table>

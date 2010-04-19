@@ -10,6 +10,8 @@ class CreateCampaigns < ActiveRecord::Migration
       t.string :image_content_type
       t.string :image_file_size
     end
+
+    add_index :campaigns, :title, :unique => true
   end
 
   def self.down

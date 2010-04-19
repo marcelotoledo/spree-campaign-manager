@@ -15,7 +15,7 @@
     <td><%= h campaign.title %></td>
     <td><%= h campaign.start_date %></td>
     <td><%= h campaign.end_date %></td>
-    <td><%= h campaign.taxonomy.name %></td>
+    <td><%= h campaign.taxonomy.name if !campaign.taxonomy.nil? %></td>
     <td>
       <% if campaign.image.exists? -%>
       <%= image_tag campaign.image.url(:thumb) %>
@@ -28,3 +28,15 @@
   </tr>
   <% end -%>
 </table>
+
+<% if params[:page] && params[:page] != '1' %>
+<%= link_to "First", collection_url %>
+<% elsif @collection.total_pages > 1 -%>
+<span class="disabled">First</span>
+<% end -%>
+<%= will_paginate(:previous_label => "#{t('previous')}", :next_label => "#{t('next')}", :container => false) %>
+<% if @collection.total_pages > 1 && params[:page] != @collection.total_pages.to_s %>
+<%= link_to "Last", collection_url(:page => @collection.total_pages) %>
+<% elsif @collection.total_pages > 1 -%>
+<span class="disabled">Last</span>
+<% end -%>

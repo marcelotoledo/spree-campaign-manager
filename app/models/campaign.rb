@@ -1,5 +1,11 @@
 class Campaign < ActiveRecord::Base
-  validates_presence_of :title
+  validates_presence_of :title, :start_date, :end_date, :taxonomy_id
+  validates_uniqueness_of :title
+
+  def validate
+    errors.add_to_base "Campaign start date must be before end date" if start_date > end_date
+  end
+
   belongs_to :taxonomy
   has_attached_file :image,
     :styles => { :thumb => "100x100#", :large => "400x400>" },

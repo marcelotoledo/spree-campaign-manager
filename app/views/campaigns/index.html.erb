@@ -1,23 +1,39 @@
 <table cellpadding="0" cellspacing="0" width="100%">
   <tr>
     <td valign="top">
-      <% ['active', 'future', 'expired'].each do |type|-%>
-        <h2><%= @campaigns[type]['label'] %></h2>
-        <% @campaigns[type]['data'].each do |campaign| -%>
-          <%= campaign.title %><br />
+      <h2><%= @campaigns['active']['label'] %></h2>
+      <% if @campaigns['active']['data'].empty? -%>
+        <p>There are no active campaigns.</p>
+      <% else -%>
+      <% @campaigns['active']['data'].each do |campaign| -%>
+        <%= campaign.title %><br />
+      <% end -%>
+      <% end -%>
+      <% ['future', 'expired'].each do |type|-%>
+        <% if !@campaigns[type]['data'].empty? -%>
+          <h2><%= @campaigns[type]['label'] %></h2>
+          <% @campaigns[type]['data'].each do |campaign| -%>
+            <%= campaign.title %><br />
+          <% end -%>
         <% end -%>
       <% end -%>
     </td>
     <td valign="top">
-      <h1>Active Campaigns</h1>
-      <% @campaigns['active']['data'].each do |campaign| %>
-        <p>From <%= campaign.start_date %> to <%= campaign.end_date %></p>
-        <%= link_to image_tag(campaign.image.url), "/campaigns/#{campaign.id}" %>
+      <% if @campaigns['active']['data'].empty? -%>
+        <p>There are no active campaigns.</p>
+      <% else -%>
+        <h1>Active Campaigns</h1>
+        <% @campaigns['active']['data'].each do |campaign| %>
+          <p>From <%= campaign.start_date %> to <%= campaign.end_date %></p>
+          <%= link_to image_tag(campaign.image.url, {:alt => campaign.title}), "/campaigns/#{campaign.id}" %>
+        <% end -%>
       <% end -%>
+      <% if !@campaigns['future']['data'].empty? -%>
       <h1>Next Campaigns</h1>
       <% @campaigns['future']['data'].each do |campaign| %>
         <p>From <%= campaign.start_date %> to <%= campaign.end_date %></p>
-        <%= image_tag(campaign.image.url) %>
+        <%= image_tag campaign.image.url, { :alt => campaign.title } %>
+      <% end -%>
       <% end -%>
     </td>
   </tr>
