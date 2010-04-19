@@ -21,8 +21,11 @@ class CampaignsController < Spree::BaseController
   end
 
   def show
-    @campaign = Campaign.find(params[:id].first)
-    redirect_to root_url if @campaign.nil? || @campaign.in_the_future? || @campaign.expired?
+    begin
+      @campaign = Campaign.find(params[:id].first)
+    rescue ActiveRecord::RecordNotFound
+    end
+    redirect_to :action => :index and return if @campaign.nil? || @campaign.in_the_future? || @campaign.expired?
 
     @campaigns = Campaign.all.select { |c| !c.in_the_future? && !c.expired? && c != @campaign }
 
@@ -30,5 +33,6 @@ class CampaignsController < Spree::BaseController
     @taxon = p_length == 1 ? @campaign.taxonomy.root : Taxon.find_by_permalink(params[:id].slice(1, p_length).join('/') + '/')
     retrieve_products
     @paginated_products = @products
+    @title = @campaign.title
   end
 end

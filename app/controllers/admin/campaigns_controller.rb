@@ -1,6 +1,4 @@
 class Admin::CampaignsController < Admin::BaseController
-  # TODO: Add pagination, Add sorting 
-
   resource_controller
 
   update.response do |wants|
@@ -12,10 +10,9 @@ class Admin::CampaignsController < Admin::BaseController
   end
 private
   def collection
-    #@collection ||= Campaign.all.sort_by{ |c| c.start_date}.reverse
     @search = Campaign.searchlogic(params[:search])
 
-    @search.order ||= "descend_by_start_date"
+    @search.order ||= "ascend_by_start_date"
 
     @collection_count = @search.count
     @collection = @search.paginate(:per_page => 10, :page => params[:page])
