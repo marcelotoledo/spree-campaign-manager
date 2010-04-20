@@ -1,6 +1,6 @@
 class CampaignsController < Spree::BaseController
   include Spree::Search
-  helper :taxons
+  helper :taxons, :products
 
   def index
     @campaigns = {
